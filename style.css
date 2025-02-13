@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /* General Styling */
 body {
     font-family: 'Arial', sans-serif;
@@ -288,8 +287,3 @@ button {
 input.invalid, textarea.invalid {
     border-color: #e74c3c; /* Red border for invalid input */
 }
-
-
-
-
->>>>>>> cb693b2 (Initial commit)
