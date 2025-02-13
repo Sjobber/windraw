@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 document.addEventListener('DOMContentLoaded', function () {
     // Function to highlight empty fields in red
     function highlightEmptyFields() {
@@ -265,5 +264,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
->>>>>>> cb693b2 (Initial commit)
