@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 
@@ -52,4 +51,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
->>>>>>> cb693b2 (Initial commit)
