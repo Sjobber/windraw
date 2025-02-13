@@ -130,8 +130,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-=======
 document.addEventListener('DOMContentLoaded', function () {
     // Function to highlight empty fields in red
     function highlightEmptyFields() {
