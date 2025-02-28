@@ -18,16 +18,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Function to process raw data
-    function processData(rawData, winningNumber, numWinners) {
+    function processData(rawData) {
         let entries = rawData.split("\n");
         let validEntries = {};
 
         entries.forEach(entry => {
-            const regex = /^([\w'\u2019\s\-]+)\s*([\w\s]*)\s*(\d+[.,:]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
+            const regex = /^([\w'\u2019\s\-]+)\s*([\w\s]*)\s*(\d+[.,]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot or comma
             const match = entry.trim().match(regex);
 
             if (match) {
-                const name = match[1].replace(/[\d]/g, '') + (match[2] ? " " + match[2].replace(/[\d]/g, '') : ""); // Username is only letters, excluding numbers
+                const name = match[1].trim() + (match[2] ? " " + match[2].trim() : ""); // Username is only letters, excluding numbers
                 const number = match[3].replace(/[:,]/g, '.'); // Extract number and convert colon and comma to dot for parsing
 
                 // Only keep the latest guess for each person
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim().replace(/[:,]/g, '.'));
         let numWinners = parseInt(document.getElementById("numWinners").value.trim(), 10);
 
-        let validEntries = processData(rawData, winningNumber, numWinners);
+        let validEntries = processData(rawData);
         let formattedOutput = determineWinners(validEntries, winningNumber, numWinners);
 
         document.getElementById("winnersBox").value = formattedOutput;
