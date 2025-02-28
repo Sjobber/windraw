@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get inputs
         let rawData = document.getElementById("rawData").value.trim();
-        let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim());
+        let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim().replace(':', '.'));
         let numWinners = parseInt(document.getElementById("numWinners").value.trim(), 10);
 
         // Split and process raw data
@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Process each entry in the raw data
         entries.forEach(entry => {
-            const regex = /^([\w'’]+)\s(\w).*?(\d+(\.\d+)?)/; // Match first word (including special characters), first letter after space, and number (supporting decimals)
+            const regex = /^([\w'’\-\s]+)\s(\w).*?(\d+[\.:]\d+|\d+)/; // Match first word (including special characters), first letter after space, and number (supporting decimals and colons)
             const match = entry.trim().match(regex);
 
             if (match) {
                 const name = match[1] + " " + match[2]; // Username is first word and first letter after space
-                const number = parseFloat(match[3]); // Extract number (supporting decimals)
+                const number = parseFloat(match[3].replace(':', '.')); // Extract number and convert colon to dot for parsing
 
                 // Only keep the latest guess for each person
                 validEntries[name] = number;
