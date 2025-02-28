@@ -53,11 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
             const match = entry.trim().match(regex);
 
             if (match) {
-                const name = match[1] + (match[2] ? " " + match[2] : ""); // Username is first word and optional first letter after space
+                const name = match[1].replace(/[\d]/g, '') + (match[2] ? " " + match[2].replace(/[\d]/g, '') : ""); // Username is only letters, excluding numbers
                 const number = parseFloat(match[3].replace(/[:,]/g, '.')); // Extract number and convert colon and comma to dot for parsing
 
                 // Only keep the latest guess for each person
-                validEntries[name] = number;
+                validEntries[name.trim()] = number;
             }
         });
 
