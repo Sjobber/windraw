@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Process each entry in the raw data
         entries.forEach(entry => {
-            const regex = /^([\w'-]+)\s(\w).*?(\d+([.,]\d+)?)/; // Match first word (including special characters and hyphen) and first letter after space
+            const regex = /^([\w'-]+)\s(\w).*?(\d+([.,]\d+)*?)$/; // Match first word (including special characters and hyphen) and first letter after space
             const match = entry.trim().match(regex);
 
             if (match) {
                 const name = match[1] + " " + match[2]; // Username is first word (including special characters and hyphen) and first letter after space
-                const number = parseFloat(match[3].replace(',', '.')); // Extract number (supporting decimals) and treat "," as "."
+                const number = parseFloat(match[3].replace(/,/g, '.')); // Extract number (supporting decimals) and treat "," as "."
 
                 // Only keep the latest guess for each person
                 validEntries[name] = number;
