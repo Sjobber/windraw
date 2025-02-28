@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Get inputs
         let rawData = document.getElementById("rawData").value.trim();
-        let winningNumber = parseInt(document.getElementById("winningNumber").value.trim(), 10);
+        let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim().replace(/,/g, '.'));
         let numWinners = parseInt(document.getElementById("numWinners").value.trim(), 10);
 
         // Split and process raw data
