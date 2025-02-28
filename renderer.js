@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
         let validEntries = {};
 
         entries.forEach(entry => {
-            const regex = /^([\w'\u2019\s\-]+)\s*([\w\s]*)\s*(\d+[.,]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot or comma
+            const regex = /^([\w'\u2019\-]+)\s+([A-Z])\s*(\d+[.,]?\d*|\d+)/; // Correctly capture the first word and one initial letter
             const match = entry.trim().match(regex);
 
             if (match) {
-                const name = match[1].trim() + (match[2] ? " " + match[2].trim() : ""); // Username is only letters, excluding numbers
+                const name = `${match[1]} ${match[2]}`; // Username includes the first word and the first letter after the first space
                 const number = match[3].replace(/[:,]/g, '.'); // Extract number and convert colon and comma to dot for parsing
 
                 // Only keep the latest guess for each person
