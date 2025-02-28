@@ -1,55 +1,29 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Function to highlight empty fields in red
     function highlightEmptyFields() {
-        const rawData = document.getElementById("rawData");
-        const winningNumber = document.getElementById("winningNumber");
-        const numWinners = document.getElementById("numWinners");
+        const fields = ["rawData", "winningNumber", "numWinners"];
         let valid = true;
 
-        // Check if each field is empty
-        if (rawData.value.trim() === "") {
-            rawData.style.border = "2px solid red";
-            valid = false;
-        } else {
-            rawData.style.border = "";
-        }
-
-        if (winningNumber.value.trim() === "") {
-            winningNumber.style.border = "2px solid red";
-            valid = false;
-        } else {
-            winningNumber.style.border = "";
-        }
-
-        if (numWinners.value.trim() === "") {
-            numWinners.style.border = "2px solid red";
-            valid = false;
-        } else {
-            numWinners.style.border = "";
-        }
+        fields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field.value.trim() === "") {
+                field.classList.add("error-border");
+                valid = false;
+            } else {
+                field.classList.remove("error-border");
+            }
+        });
 
         return valid;
     }
 
-    // Event listener for "Winners" button
-    document.getElementById("winners").addEventListener("click", function () {
-        // Highlight empty fields and stop if invalid
-        if (!highlightEmptyFields()) {
-            return; // Don't proceed if fields are invalid
-        }
-
-        // Get inputs
-        let rawData = document.getElementById("rawData").value.trim();
-        let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim().replace(/[:,]/g, '.'));
-        let numWinners = parseInt(document.getElementById("numWinners").value.trim(), 10);
-
-        // Split and process raw data
+    // Function to process raw data
+    function processData(rawData, winningNumber, numWinners) {
         let entries = rawData.split("\n");
         let validEntries = {};
 
-        // Process each entry in the raw data
         entries.forEach(entry => {
-            const regex = /^([\w'’\-\s]+)\s*([\w]*)\s*(\d+[.,:]\d+|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
+            const regex = /^([\w'\u2019\s\-]+)\s*([\w]*)\s*(\d+[.,:]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
             const match = entry.trim().match(regex);
 
             if (match) {
@@ -61,43 +35,35 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // If no valid entries found
+        return validEntries;
+    }
+
+    // Function to determine winners
+    function determineWinners(validEntries, winningNumber, numWinners) {
         if (Object.keys(validEntries).length === 0) {
-            document.getElementById("winnersBox").value = "No valid entries found.";
-            return;
+            return "No valid entries found.";
         }
 
-        // Sort by closest to winning number and group them
-        let winners = [];
-        let tempWinners = [];
-        let lastDistance = Math.abs(parseFloat(Object.values(validEntries)[0]) - winningNumber);
-
-        // Sort entries by distance from the winning number
         let sortedEntries = Object.entries(validEntries).sort((a, b) => Math.abs(parseFloat(a[1]) - winningNumber) - Math.abs(parseFloat(b[1]) - winningNumber));
+        let winners = [], tempWinners = [], lastDistance = Math.abs(parseFloat(sortedEntries[0][1]) - winningNumber);
 
         sortedEntries.forEach(entry => {
             const distance = Math.abs(parseFloat(entry[1]) - winningNumber);
-
-            // If the current entry is equally close to the winning number, add it to the tempWinners
             if (distance === lastDistance) {
                 tempWinners.push(entry);
             } else {
-                // If the distance changes, push the previous group to winners
                 winners = winners.concat(tempWinners);
                 tempWinners = [entry];
                 lastDistance = distance;
             }
         });
 
-        // Don't forget to push the last group
         winners = winners.concat(tempWinners);
 
-        // If we have more than the required winners, trim the result to the numWinners
         if (winners.length > numWinners) {
             winners = winners.slice(0, numWinners);
         }
 
-        // If there are still more winners tied with the last one, include them
         const lastWinnerDistance = Math.abs(parseFloat(winners[winners.length - 1][1]) - winningNumber);
         sortedEntries.forEach(entry => {
             const distance = Math.abs(parseFloat(entry[1]) - winningNumber);
@@ -106,26 +72,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        // Format output
-        let formattedOutput = winners.map(winner => {
-            return `:W: ${winner[0]} :W: ${winner[1]}`;
-        }).join("\n");
+        return winners.map(winner => `:W: ${winner[0]} :W: ${winner[1]}`).join("\n");
+    }
 
-        // Show formatted output
+    // Event listener for "Winners" button
+    document.getElementById("winners").addEventListener("click", function () {
+        if (!highlightEmptyFields()) {
+            return; // Don't proceed if fields are invalid
+        }
+
+        let rawData = document.getElementById("rawData").value.trim();
+        let winningNumber = parseFloat(document.getElementById("winningNumber").value.trim().replace(/[:,]/g, '.'));
+        let numWinners = parseInt(document.getElementById("numWinners").value.trim(), 10);
+
+        let validEntries = processData(rawData, winningNumber, numWinners);
+        let formattedOutput = determineWinners(validEntries, winningNumber, numWinners);
+
         document.getElementById("winnersBox").value = formattedOutput;
     });
 
     // Event listener for "Clear" button
     document.getElementById("clear").addEventListener("click", function () {
-        // Clear all input boxes and output
-        document.getElementById("rawData").value = "";
-        document.getElementById("winningNumber").value = "";
-        document.getElementById("numWinners").value = "";
-        document.getElementById("winnersBox").value = "";
-
-        // Reset input field borders
-        document.getElementById("rawData").style.border = "";
-        document.getElementById("winningNumber").style.border = "";
-        document.getElementById("numWinners").style.border = "";
+        ["rawData", "winningNumber", "numWinners", "winnersBox"].forEach(fieldId => {
+            document.getElementById(fieldId).value = "";
+            document.getElementById(fieldId).classList.remove("error-border");
+        });
     });
 });
