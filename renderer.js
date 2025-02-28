@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Process each entry in the raw data
         entries.forEach(entry => {
-            const regex = /^([\w'’\-\s]+)\s*([\w]*)\s*(\d+[.,:]\d+|\d+)/; // Updated regex to capture usernames with hyphens and numbers with dot, colon, or comma
+            const regex = /^([\w'’\-\s]+)\s*([\w]*)\s*(\d+[.,:]\d+|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
             const match = entry.trim().match(regex);
 
             if (match) {
                 const name = match[1].replace(/[\d]/g, '') + (match[2] ? " " + match[2].replace(/[\d]/g, '') : ""); // Username is only letters, excluding numbers
-                const number = parseFloat(match[3].replace(/[:,]/g, '.')); // Extract number and convert colon and comma to dot for parsing
+                const number = match[3].replace(/[:,]/g, '.'); // Extract number and convert colon and comma to dot for parsing
 
                 // Only keep the latest guess for each person
                 validEntries[name.trim()] = number;
@@ -70,13 +70,13 @@ document.addEventListener('DOMContentLoaded', function () {
         // Sort by closest to winning number and group them
         let winners = [];
         let tempWinners = [];
-        let lastDistance = Math.abs(Object.values(validEntries)[0] - winningNumber);
+        let lastDistance = Math.abs(parseFloat(Object.values(validEntries)[0]) - winningNumber);
 
         // Sort entries by distance from the winning number
-        let sortedEntries = Object.entries(validEntries).sort((a, b) => Math.abs(a[1] - winningNumber) - Math.abs(b[1] - winningNumber));
+        let sortedEntries = Object.entries(validEntries).sort((a, b) => Math.abs(parseFloat(a[1]) - winningNumber) - Math.abs(parseFloat(b[1]) - winningNumber));
 
         sortedEntries.forEach(entry => {
-            const distance = Math.abs(entry[1] - winningNumber);
+            const distance = Math.abs(parseFloat(entry[1]) - winningNumber);
 
             // If the current entry is equally close to the winning number, add it to the tempWinners
             if (distance === lastDistance) {
@@ -98,9 +98,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // If there are still more winners tied with the last one, include them
-        const lastWinnerDistance = Math.abs(winners[winners.length - 1][1] - winningNumber);
+        const lastWinnerDistance = Math.abs(parseFloat(winners[winners.length - 1][1]) - winningNumber);
         sortedEntries.forEach(entry => {
-            const distance = Math.abs(entry[1] - winningNumber);
+            const distance = Math.abs(parseFloat(entry[1]) - winningNumber);
             if (distance === lastWinnerDistance && !winners.includes(entry)) {
                 winners.push(entry);
             }
