@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let validEntries = {};
 
         entries.forEach(entry => {
-            const regex = /^([\w'\u2019\s\-]+)\s*([\w]*)\s*(\d+[.,:]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
+            const regex = /^([\w'\u2019\s\-]+)\s*([\w\s]*)\s*(\d+[.,:]?\d*|\d+)/; // Capture usernames with hyphens and numbers with dot, colon, or comma
             const match = entry.trim().match(regex);
 
             if (match) {
