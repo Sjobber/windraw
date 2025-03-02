@@ -49,12 +49,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Process each entry in the raw data
         entries.forEach(entry => {
-            const regex = /^([\w'-]+)\s(\w+)\s+(\d+([.,]\d+)*)(?:\s*[\£\$\€\¥\₹]?)\s*.*$/; // Match first word, second word, and number (supporting decimals)
+            const regex = /^([\w'-]+\s\w+)(\d+([.,]\d+)*)(.*)$/; // Match username (first word and second word), number, and the rest of the message
             const match = entry.trim().match(regex);
 
             if (match) {
-                const name = match[1] + " " + match[2]; // Username is first word and second word
-                const number = parseFloat(match[3].replace(/,/g, '.')); // Extract number (supporting decimals) and treat "," as "."
+                const name = match[1].trim(); // Username is first word and second word
+                const number = parseFloat(match[2].replace(/,/g, '.')); // Extract number (supporting decimals) and treat "," as "."
 
                 // Only keep the latest guess for each person
                 validEntries[name] = number;
