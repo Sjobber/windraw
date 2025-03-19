@@ -58,8 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (numberMatch) {
                     const number = parseFloat(numberMatch[0].replace(/,/g, '.')); // Convert to float
 
-                    // Only keep the latest guess for each person
-                    validEntries[username] = number;
+                    // Only keep the first guess for each person
+                    if (!validEntries.hasOwnProperty(username)) {
+                        validEntries[username] = number;
                 }
             }
         });
