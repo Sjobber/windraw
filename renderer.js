@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Only keep the first guess for each person
                     if (!validEntries.hasOwnProperty(username)) {
                         validEntries[username] = number;
+                    }
                 }
             }
         });
