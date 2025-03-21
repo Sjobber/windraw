@@ -46,14 +46,21 @@ document.addEventListener('DOMContentLoaded', function () {
         // Split and process raw data
         let entries = rawData.split("\n");
         let validEntries = {};
+        let markoKCount = 0;
 
         // Process each entry in the raw data
         entries.forEach(entry => {
             const firstSpaceIndex = entry.indexOf(' ');
             if (firstSpaceIndex !== -1) {
-                const username = entry.substring(0, firstSpaceIndex + 2); // Take one letter after the first space
+                let username = entry.substring(0, firstSpaceIndex + 2); // Take one letter after the first space
                 const message = entry.substring(firstSpaceIndex + 2).trim(); // Everything after the username
                 const numberMatch = message.match(/\d+([.,]\d+)*/); // Extract the first number found in the message
+
+                // Handle "Marko K" username
+                if (username.trim() === "Marko K") {
+                    markoKCount++;
+                    username = `Marko K${markoKCount}`;
+                }
 
                 if (numberMatch) {
                     const number = parseFloat(numberMatch[0].replace(/,/g, '.')); // Convert to float
