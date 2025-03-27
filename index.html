@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winner Selection App</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+    <script>
+        // Password protection
+        const correctPassword = "Rullakebu12"; // Set your password here
+        function checkPassword() {
+            const userPassword = prompt("Enter the password:");
+            if (userPassword !== correctPassword) {
+                alert("Incorrect password. Access denied.");
+                window.location.href = "https://www.example.com"; // Redirect to another page or show an alert
+            }
+        }
+    </script>
 </head>
-<body>
+<body onload="checkPassword()">
     <div class="container">
         <h1>Winner Selection App</h1>
 
